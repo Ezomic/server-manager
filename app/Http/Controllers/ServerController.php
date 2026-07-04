@@ -34,6 +34,19 @@ class ServerController extends Controller
         return to_route('servers.index');
     }
 
+    public function show(Server $server): Response
+    {
+        return Inertia::render('servers/Show', [
+            'server' => $server->load('sshKey:id,name'),
+            'latestMetric' => $server->metrics()->latest('recorded_at')->first(),
+            'metrics' => $server->metrics()
+                ->where('recorded_at', '>=', now()->subHours(24))
+                ->oldest('recorded_at')
+                ->get(),
+            'hasAgentToken' => $server->agent_token !== null,
+        ]);
+    }
+
     public function edit(Server $server): Response
     {
         return Inertia::render('servers/Edit', [

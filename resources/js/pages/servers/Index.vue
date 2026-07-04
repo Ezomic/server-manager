@@ -63,7 +63,13 @@ const destroy = (server: Server) => {
                         :key="server.id"
                         class="border-b last:border-0"
                     >
-                        <td class="p-3 font-medium">{{ server.name }}</td>
+                        <td class="p-3 font-medium">
+                            <Link
+                                :href="serverRoutes.show(server.id)"
+                                class="hover:underline"
+                                >{{ server.name }}</Link
+                            >
+                        </td>
                         <td class="p-3 text-muted-foreground">
                             {{ server.ssh_user }}@{{ server.hostname }}:{{
                                 server.port
