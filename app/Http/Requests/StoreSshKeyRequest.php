@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreSshKeyRequest extends FormRequest
+{
+    /** @return array<string, array<int, mixed>> */
+    public function rules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'public_key' => ['required', 'string'],
+            'private_key' => ['required', 'string'],
+        ];
+    }
+}
