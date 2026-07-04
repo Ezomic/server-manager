@@ -7,9 +7,11 @@ namespace App\Models;
 use Carbon\CarbonImmutable;
 use Database\Factories\ServerFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -26,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property CarbonImmutable|null $last_seen_at
  */
 #[Fillable(['name', 'hostname', 'port', 'ssh_user', 'ssh_key_id', 'type', 'provider', 'tags', 'notes'])]
+#[Hidden(['agent_token'])]
 class Server extends Model
 {
     /** @use HasFactory<ServerFactory> */
@@ -35,6 +38,12 @@ class Server extends Model
     public function sshKey(): BelongsTo
     {
         return $this->belongsTo(SshKey::class);
+    }
+
+    /** @return HasMany<Metric, $this> */
+    public function metrics(): HasMany
+    {
+        return $this->hasMany(Metric::class);
     }
 
     protected function casts(): array

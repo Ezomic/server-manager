@@ -9,6 +9,17 @@ export interface SshKey extends SshKeyOption {
     created_at: string;
 }
 
+export interface Metric {
+    id: number;
+    cpu_percent: number;
+    memory_used_mb: number;
+    memory_total_mb: number;
+    disk_used_mb: number;
+    disk_total_mb: number;
+    load_avg: number;
+    recorded_at: string;
+}
+
 export interface Server {
     id: number;
     name: string;
