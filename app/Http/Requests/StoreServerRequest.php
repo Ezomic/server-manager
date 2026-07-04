@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 
 class StoreServerRequest extends FormRequest
 {
+    /** @return array<string, array<int, mixed>> */
     public function rules(): array
     {
         return [
