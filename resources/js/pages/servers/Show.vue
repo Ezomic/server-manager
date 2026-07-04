@@ -2,6 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import MetricSparkline from '@/components/MetricSparkline.vue';
+import ServicesPanel from '@/components/ServicesPanel.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -153,6 +154,8 @@ const diskSeries = computed(() =>
                 </CardContent>
             </Card>
         </div>
+
+        <ServicesPanel :server-id="server.id" />
 
         <p v-if="server.notes" class="text-sm whitespace-pre-line">
             {{ server.notes }}
