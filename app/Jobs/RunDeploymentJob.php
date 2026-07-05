@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Exceptions\MissingSshKeyException;
 use App\Models\Deployment;
 use App\Services\Ssh\SshClient;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,12 +23,20 @@ class RunDeploymentJob implements ShouldQueue
     {
         $script = $this->deployment->deploymentScript;
 
-        $result = $ssh->run($script->server, $script->script);
+        try {
+            $result = $ssh->run($script->server, $script->script);
 
-        $this->deployment->forceFill([
-            'status' => $result->successful ? 'succeeded' : 'failed',
-            'output' => $result->successful ? $result->output : $result->output."\n".$result->errorOutput,
-            'finished_at' => Date::now(),
-        ])->save();
+            $this->deployment->forceFill([
+                'status' => $result->successful ? 'succeeded' : 'failed',
+                'output' => $result->successful ? $result->output : $result->output."\n".$result->errorOutput,
+                'finished_at' => Date::now(),
+            ])->save();
+        } catch (MissingSshKeyException $e) {
+            $this->deployment->forceFill([
+                'status' => 'failed',
+                'output' => $e->getMessage(),
+                'finished_at' => Date::now(),
+            ])->save();
+        }
     }
 }

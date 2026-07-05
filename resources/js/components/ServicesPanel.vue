@@ -33,7 +33,9 @@ const load = async () => {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+            const body = await response.json().catch(() => null);
+
+            throw new Error(body?.message || `HTTP ${response.status}`);
         }
 
         services.value = (await response.json()).services;

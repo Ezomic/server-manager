@@ -60,3 +60,9 @@ it('surfaces a missing file message', function () {
         ->assertOk()
         ->assertJsonPath('output', 'File not found: /var/log/missing.log');
 });
+
+it('returns a friendly error when the server has no ssh key', function () {
+    $this->getJson(route('servers.logs.index', $this->server).'?path=/var/log/app.log')
+        ->assertUnprocessable()
+        ->assertJsonPath('message', "Server {$this->server->name} has no SSH key configured.");
+});
