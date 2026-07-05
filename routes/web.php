@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AgentInstallController;
+use App\Http\Controllers\DeploymentController;
+use App\Http\Controllers\DeploymentScriptController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\ServerServiceController;
 use App\Http\Controllers\SshKeyController;
@@ -19,6 +21,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('servers/{server}/services', [ServerServiceController::class, 'store'])
         ->name('servers.services.store');
     Route::resource('ssh-keys', SshKeyController::class)->only(['index', 'store', 'destroy']);
+
+    Route::post('servers/{server}/deployment-scripts', [DeploymentScriptController::class, 'store'])
+        ->name('servers.deployment-scripts.store');
+    Route::delete('servers/{server}/deployment-scripts/{deploymentScript}', [DeploymentScriptController::class, 'destroy'])
+        ->name('servers.deployment-scripts.destroy');
+    Route::get('servers/{server}/deployments', [DeploymentController::class, 'index'])
+        ->name('servers.deployments.index');
+    Route::post('servers/{server}/deployment-scripts/{deploymentScript}/run', [DeploymentController::class, 'store'])
+        ->name('servers.deployments.store');
+    Route::get('servers/{server}/deployments/{deployment}', [DeploymentController::class, 'show'])
+        ->name('servers.deployments.show');
 });
 
 require __DIR__.'/settings.php';
