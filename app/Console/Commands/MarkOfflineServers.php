@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Models\Server;
+use App\Models\User;
+use App\Notifications\ServerWentOffline;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Notification;
 
 class MarkOfflineServers extends Command
 {
@@ -16,11 +19,16 @@ class MarkOfflineServers extends Command
 
     public function handle(): int
     {
-        $count = Server::where('status', 'online')
+        $servers = Server::where('status', 'online')
             ->where('last_seen_at', '<', Date::now()->subMinutes(2))
-            ->update(['status' => 'offline']);
+            ->get();
 
-        $this->info("Marked {$count} server(s) offline.");
+        foreach ($servers as $server) {
+            $server->forceFill(['status' => 'offline'])->save();
+            Notification::send(User::all(), new ServerWentOffline($server));
+        }
+
+        $this->info("Marked {$servers->count()} server(s) offline.");
 
         return self::SUCCESS;
     }
