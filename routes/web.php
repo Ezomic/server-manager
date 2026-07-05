@@ -4,6 +4,7 @@ use App\Http\Controllers\AgentInstallController;
 use App\Http\Controllers\DeploymentController;
 use App\Http\Controllers\DeploymentScriptController;
 use App\Http\Controllers\ServerController;
+use App\Http\Controllers\ServerLogController;
 use App\Http\Controllers\ServerServiceController;
 use App\Http\Controllers\SshKeyController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('servers.deployments.store');
     Route::get('servers/{server}/deployments/{deployment}', [DeploymentController::class, 'show'])
         ->name('servers.deployments.show');
+
+    Route::get('servers/{server}/logs', [ServerLogController::class, 'index'])
+        ->name('servers.logs.index');
 });
 
 require __DIR__.'/settings.php';
