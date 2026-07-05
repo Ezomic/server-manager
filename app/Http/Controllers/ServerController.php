@@ -44,6 +44,7 @@ class ServerController extends Controller
                 ->oldest('recorded_at')
                 ->get(),
             'hasAgentToken' => $server->agent_token !== null,
+            'deploymentScripts' => $server->deploymentScripts()->orderBy('name')->get(),
         ]);
     }
 

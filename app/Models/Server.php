@@ -46,6 +46,18 @@ class Server extends Model
         return $this->hasMany(Metric::class);
     }
 
+    /** @return HasMany<DeploymentScript, $this> */
+    public function deploymentScripts(): HasMany
+    {
+        return $this->hasMany(DeploymentScript::class);
+    }
+
+    /** @return HasMany<Deployment, $this> */
+    public function deployments(): HasMany
+    {
+        return $this->hasMany(Deployment::class);
+    }
+
     protected function casts(): array
     {
         return [

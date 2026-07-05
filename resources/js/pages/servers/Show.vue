@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import DeploymentsPanel from '@/components/DeploymentsPanel.vue';
 import MetricSparkline from '@/components/MetricSparkline.vue';
 import ServicesPanel from '@/components/ServicesPanel.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import serverRoutes, { agentScript } from '@/routes/servers';
+import type { DeploymentScript } from '@/types/deployments';
 import type { Metric, Server } from '@/types/servers';
 
 const props = defineProps<{
@@ -14,6 +16,7 @@ const props = defineProps<{
     latestMetric: Metric | null;
     metrics: Metric[];
     hasAgentToken: boolean;
+    deploymentScripts: DeploymentScript[];
 }>();
 
 defineOptions({
@@ -156,6 +159,8 @@ const diskSeries = computed(() =>
         </div>
 
         <ServicesPanel :server-id="server.id" />
+
+        <DeploymentsPanel :server-id="server.id" :scripts="deploymentScripts" />
 
         <p v-if="server.notes" class="text-sm whitespace-pre-line">
             {{ server.notes }}
