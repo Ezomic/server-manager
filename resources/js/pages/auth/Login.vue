@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Form, Head } from '@inertiajs/vue3';
+import { Form, Head, usePage } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import PasskeyVerify from '@/components/PasskeyVerify.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
@@ -24,6 +24,9 @@ defineProps<{
     status?: string;
     canResetPassword: boolean;
 }>();
+
+const devLoginEnabled = usePage().props.devLoginEnabled as boolean;
+const csrfToken = () => usePage().props.csrf_token as string;
 </script>
 
 <template>
@@ -107,4 +110,16 @@ defineProps<{
             <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
         </div>
     </Form>
+
+    <form
+        v-if="devLoginEnabled"
+        :action="'/dev-login'"
+        method="post"
+        class="mt-4"
+    >
+        <input type="hidden" name="_token" :value="csrfToken()" />
+        <Button type="submit" variant="outline" class="w-full">
+            Log in as dev
+        </Button>
+    </form>
 </template>
