@@ -116,3 +116,9 @@ it('surfaces command failures', function () {
         ->assertJsonPath('successful', false)
         ->assertJsonPath('output', 'Failed to restart nginx.service: access denied');
 });
+
+it('returns a friendly error when the server has no ssh key', function () {
+    $this->getJson(route('servers.services.index', $this->server))
+        ->assertUnprocessable()
+        ->assertJsonPath('message', "Server {$this->server->name} has no SSH key configured.");
+});

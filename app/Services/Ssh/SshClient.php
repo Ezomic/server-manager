@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Ssh;
 
+use App\Exceptions\MissingSshKeyException;
 use App\Models\Server;
 use RuntimeException;
 use Spatie\Ssh\Ssh;
@@ -15,7 +16,7 @@ class SshClient
         $key = $server->sshKey;
 
         if ($key === null) {
-            throw new RuntimeException("Server {$server->name} has no SSH key configured.");
+            throw new MissingSshKeyException("Server {$server->name} has no SSH key configured.");
         }
 
         $keyPath = tempnam(sys_get_temp_dir(), 'sm_key_');

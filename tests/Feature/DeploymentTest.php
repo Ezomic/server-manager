@@ -80,3 +80,14 @@ it('rejects running a script that belongs to another server', function () {
     $this->postJson(route('servers.deployments.store', [$this->server, $script]))
         ->assertNotFound();
 });
+
+it('marks a deployment failed with a friendly message when the server has no ssh key', function () {
+    $script = DeploymentScript::factory()->create(['server_id' => $this->server->id]);
+
+    $this->postJson(route('servers.deployments.store', [$this->server, $script]))
+        ->assertCreated();
+
+    expect(Deployment::sole())
+        ->status->toBe('failed')
+        ->output->toBe("Server {$this->server->name} has no SSH key configured.");
+});
