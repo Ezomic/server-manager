@@ -2,6 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import DeploymentsPanel from '@/components/DeploymentsPanel.vue';
+import LogsPanel from '@/components/LogsPanel.vue';
 import MetricSparkline from '@/components/MetricSparkline.vue';
 import ServicesPanel from '@/components/ServicesPanel.vue';
 import { Badge } from '@/components/ui/badge';
@@ -161,6 +162,8 @@ const diskSeries = computed(() =>
         <ServicesPanel :server-id="server.id" />
 
         <DeploymentsPanel :server-id="server.id" :scripts="deploymentScripts" />
+
+        <LogsPanel :server-id="server.id" />
 
         <p v-if="server.notes" class="text-sm whitespace-pre-line">
             {{ server.notes }}
