@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgentInstallController;
 use App\Http\Controllers\DeploymentController;
 use App\Http\Controllers\DeploymentScriptController;
+use App\Http\Controllers\DevLoginController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\ServerLogController;
 use App\Http\Controllers\ServerServiceController;
@@ -10,6 +11,10 @@ use App\Http\Controllers\SshKeyController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Welcome')->name('home');
+
+if (app()->environment(['local', 'testing'])) {
+    Route::post('dev-login', [DevLoginController::class, 'store'])->name('dev-login');
+}
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
