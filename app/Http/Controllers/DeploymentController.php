@@ -8,6 +8,7 @@ use App\Actions\RunDeployment;
 use App\Models\Deployment;
 use App\Models\DeploymentScript;
 use App\Models\Server;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,10 @@ class DeploymentController extends Controller
     {
         abort_unless($deploymentScript->server_id === $server->id, 404);
 
-        $deployment = $runDeployment->handle($deploymentScript, $request->user());
+        $user = $request->user();
+        abort_unless($user instanceof User, 403);
+
+        $deployment = $runDeployment->handle($deploymentScript, $user);
 
         return response()->json(['deployment' => $deployment], 201);
     }

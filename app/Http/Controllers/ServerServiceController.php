@@ -18,9 +18,12 @@ class ServerServiceController extends Controller
 
     public function store(ServiceActionRequest $request, Server $server, ServiceManager $services): JsonResponse
     {
-        $validated = $request->validated();
-
-        $result = $services->perform($server, $validated['type'], $validated['name'], $validated['action']);
+        $result = $services->perform(
+            $server,
+            $request->string('type')->value(),
+            $request->string('name')->value(),
+            $request->string('action')->value(),
+        );
 
         return response()->json([
             'successful' => $result->successful,
