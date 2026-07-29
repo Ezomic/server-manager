@@ -9,15 +9,16 @@ use App\Http\Controllers\ServerLogController;
 use App\Http\Controllers\ServerServiceController;
 use App\Http\Controllers\SshKeyController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-Route::inertia('/', 'Welcome')->name('home');
+Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
 
 if (app()->environment(['local', 'testing'])) {
     Route::post('dev-login', [DevLoginController::class, 'store'])->name('dev-login');
 }
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    Route::get('dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
 
     Route::resource('servers', ServerController::class);
     Route::post('servers/{server}/agent-script', [AgentInstallController::class, 'store'])

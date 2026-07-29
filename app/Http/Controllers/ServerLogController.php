@@ -13,9 +13,7 @@ class ServerLogController extends Controller
 {
     public function index(TailLogRequest $request, Server $server, LogTailer $tailer): JsonResponse
     {
-        $validated = $request->validated();
-
-        $result = $tailer->tail($server, $validated['path'], $validated['lines'] ?? 200);
+        $result = $tailer->tail($server, $request->string('path')->value(), $request->integer('lines', 200));
 
         return response()->json([
             'successful' => $result->successful,

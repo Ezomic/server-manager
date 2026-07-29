@@ -21,10 +21,11 @@ class RunDeploymentJob implements ShouldQueue
 
     public function handle(SshClient $ssh): void
     {
-        $script = $this->deployment->deploymentScript;
+        $script = $this->deployment->deploymentScript()->firstOrFail();
+        $server = $script->server()->firstOrFail();
 
         try {
-            $result = $ssh->run($script->server, $script->script);
+            $result = $ssh->run($server, $script->script);
 
             $this->deployment->forceFill([
                 'status' => $result->successful ? 'succeeded' : 'failed',

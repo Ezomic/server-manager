@@ -20,4 +20,17 @@ class StoreMetricRequest extends FormRequest
             'load_avg' => ['required', 'numeric', 'min:0'],
         ];
     }
+
+    /** @return array<string, float|int> */
+    public function metrics(): array
+    {
+        return [
+            'cpu_percent' => $this->float('cpu_percent'),
+            'memory_used_mb' => $this->integer('memory_used_mb'),
+            'memory_total_mb' => $this->integer('memory_total_mb'),
+            'disk_used_mb' => $this->integer('disk_used_mb'),
+            'disk_total_mb' => $this->integer('disk_total_mb'),
+            'load_avg' => $this->float('load_avg'),
+        ];
+    }
 }

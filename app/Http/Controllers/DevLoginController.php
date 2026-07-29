@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class DevLoginController extends Controller
 {
@@ -16,7 +17,7 @@ class DevLoginController extends Controller
 
         $user = User::firstOrCreate(
             ['email' => 'dev@server-manager.test'],
-            ['name' => 'Dev', 'password' => bcrypt(str()->random(32)), 'email_verified_at' => now()],
+            ['name' => 'Dev', 'password' => bcrypt(Str::random(32)), 'email_verified_at' => now()],
         );
 
         Auth::login($user);

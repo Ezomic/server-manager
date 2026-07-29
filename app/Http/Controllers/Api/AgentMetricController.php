@@ -22,7 +22,7 @@ class AgentMetricController extends Controller
 
         abort_unless($server !== null, 401);
 
-        $recordMetric->handle($server, $request->validated());
+        $recordMetric->handle($server, $request->metrics());
 
         return response()->json(['status' => 'ok'], 201);
     }
